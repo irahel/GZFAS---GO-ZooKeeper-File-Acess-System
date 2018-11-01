@@ -39,7 +39,7 @@ var(
 
 )
 
-
+					
 func Connect_zk(){
 
 	ConnectedClients = make(chan []Client, 1)
@@ -292,6 +292,7 @@ func Connect_cli(ID_SEND string, CONN_SEND net.Conn){
 		fmt.Printf("%s %s\n", messages.SERVER_PREFIX, messages.MESSAGE_CREATE_FAILED)
 		panic(err)
 	}
+		
 	//DEBUG
 	fmt.Printf("Create client/x/ACTIONS \n")	
 
@@ -384,8 +385,29 @@ func Disconnect_cli(ID_SEND string){
 		
 		
 		path = strings.Replace(path, "/STATUS", "/ACTIONS", -1)
+		childrens, _ , err := zkServerConnChan.Children(path)	
+		if err != nil{
+			fmt.Printf("%s %s\n", messages.SERVER_PREFIX, messages.MESSAGE_GET_CHILDRENS_ERROR)
+			panic(err)			
+		}
+		
+		if len(childrens) != 0{
+			//DEBUG
+			fmt.Printf("FILHOOOOOOOOOOOOOS = %s\n", strconv.Itoa(len(childrens)))
+			for _, item := range childrens {	
+				err = zkServerConnChan.Delete(path +"/"+item, -1)	
+				if err != nil{
+					fmt.Printf("%s %s\n", messages.SERVER_PREFIX, messages.MESSAGE_GET_CHILDRENS_ERROR)
+					panic(err)			
+				}
+				fmt.Printf("FILHO DELETED\n")
+
+			}
+
+		}
+		
 		//DEBUG
-		err = zkServerConnChan.Delete(path, -1)	
+		err = zkServerConnChan.Delete(path, -1)
 		if err != nil{			
 			fmt.Printf("%s %s\n", messages.SERVER_PREFIX, messages.MESSAGE_DELETE_FAILED)
 			panic(err)			
@@ -547,4 +569,3 @@ func main(){
 }
 
 //TO DO ANNOTATION
-//DISCONNECT REMOVE ZNODES ACTIONS CHILDRENS

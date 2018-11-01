@@ -28,6 +28,8 @@ const(
 	MESSAGE_TCP_C_ERROR string = "Error on solve TCP connection."
 	MESSAGE_CONN_A_ERROR string = "Error on accept connection"
 
+	MESSAGE_GET_CHILDRENS_ERROR string = "Error on getting delete childrens"
+
 	MESSAGE_TCP_C_SUCCESS string = "TCP connection successfully connected."
 	MESSAGE_TCP_DC_SUCCESS string = "TCP connection successfully disconnected."
 
